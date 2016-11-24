@@ -11,7 +11,7 @@ This library requires the following:
 
 Clone the project from GitHub.
 
-    git clone https://github.com/daveqr/dr.git
+    $ git clone https://github.com/daveqr/dr.git
 
 ## Usage
 From the project directory, run:
