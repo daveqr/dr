@@ -35,3 +35,5 @@ From the project directory, run:
 ## Implementation and Limitations
 
 The implementation is straight-forward, using a transaction script to process the file. With a little bit of work the service could be made into a template so that different implementations could handle, for example, non-US Locales.
+
+One major limitation to the current implementation is the service expects the source file to be at the root of the Classpath. This limits its usefulness in real-world scenarios, where data might be from a database, a generated String or any number of other sources.
