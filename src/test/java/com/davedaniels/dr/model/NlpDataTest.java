@@ -42,8 +42,8 @@ public class NlpDataTest {
       String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
       expected += "<nlpData>";
       expected += "<sentences>";
-      expected += "<sentence boundary=\"0\"><properNouns/><value>This is 1</value><words><word>This</word><word>is</word><word>1</word></words></sentence>";
-      expected += "<sentence boundary=\"10\"><properNouns/><value>This is 2</value><words><word>This</word><word>is</word><word>2</word></words></sentence>";
+      expected += "<sentence><properNouns/><value>This is 1</value><words><word>This</word><word>is</word><word>1</word></words></sentence>";
+      expected += "<sentence><properNouns/><value>This is 2</value><words><word>This</word><word>is</word><word>2</word></words></sentence>";
       expected += "</sentences>";
       expected += "</nlpData>";
 
