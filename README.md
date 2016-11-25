@@ -30,6 +30,7 @@ From the project directory, run:
 * The default Locale is US.
 * Helper methods in the service are protected for testing.
 * The sentence boundary and word tokenization tests are limited. There are probably more conditions which should be tested, including null tests.
+* In a real-world situation, I would have clarified some of the requirements with the customer.
 
 ## Limitations
 
