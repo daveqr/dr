@@ -50,23 +50,19 @@ public class NlpService {
    public void process() throws Exception {
       NlpData data = aggregateData( loadSourceStrings( sourceFileName ), loadProperNouns( properNounsFileName ) );
 
-      String xml = data.toXml();
-      List<String> foundNouns = data.findProperNouns();
-
-      System.out.println( xml );
+      System.out.println( data.toXml() );
       System.out.println( "Found these proper nouns:" );
-      for ( String string : foundNouns ) {
-         System.out.println( string );
+      for ( String noun : data.findProperNouns() ) {
+         System.out.println( noun );
       }
    }
 
 
-   protected NlpData aggregateData( final List<String> sourceStrings, final List<String> properNouns )
-         throws InterruptedException, ExecutionException {
+   protected NlpData aggregateData( final List<String> sourceStrings, final List<String> properNouns ) {
       List<Callable<NlpData>> tasks = new ArrayList<>();
       ExecutorService executorPool = Executors.newFixedThreadPool( 5 );
 
-      for ( final String text : sourceStrings ) {
+      for ( String text : sourceStrings ) {
          tasks.add( new Callable<NlpData>() {
 
             @Override
@@ -77,8 +73,13 @@ public class NlpService {
       }
 
       NlpData data = new NlpData( properNouns );
-      for ( Future<NlpData> future : executorPool.invokeAll( tasks ) ) {
-         data.getSentences().addAll( future.get().getSentences() );
+      try {
+         for ( Future<NlpData> future : executorPool.invokeAll( tasks ) ) {
+            data.getSentences().addAll( future.get().getSentences() );
+         }
+      }
+      catch ( InterruptedException | ExecutionException e ) {
+         e.printStackTrace();
       }
 
       executorPool.shutdown();
@@ -90,13 +91,13 @@ public class NlpService {
    protected List<String> loadSourceStrings( final String fileName ) throws Exception {
       List<String> sourceStrings = new ArrayList<>();
 
-      Path path = Paths.get( getClass().getClassLoader().getResource( fileName ).toURI() );
-      try (ZipFile zipFile = new ZipFile( path.toFile() )) {
+      Path path = findPath( fileName );
+      try (final ZipFile zipFile = new ZipFile( path.toFile() )) {
          final Enumeration<? extends ZipEntry> entries = zipFile.entries();
          while ( entries.hasMoreElements() ) {
             final ZipEntry entry = entries.nextElement();
 
-            // Some extra mac weirdness in the zip
+            // Some extra Mac weirdness in the zip
             if ( !entry.isDirectory() && !entry.getName().contains( "__MACOSX" ) ) {
                sourceStrings.add( convertInputStreamToString( zipFile.getInputStream( entry ) ) );
             }
@@ -112,6 +113,11 @@ public class NlpService {
    }
 
 
+   private Path findPath( final String fileName ) throws URISyntaxException {
+      return Paths.get( getClass().getClassLoader().getResource( fileName ).toURI() );
+   }
+
+
    // Would probably use a helper library for this in situ
    private String convertInputStreamToString( final InputStream inputStream ) throws IOException {
       ByteArrayOutputStream result = new ByteArrayOutputStream();
@@ -120,16 +126,25 @@ public class NlpService {
       while ( (length = inputStream.read( buffer )) != -1 ) {
          result.write( buffer, 0, length );
       }
-      String x = result.toString( "UTF-8" );
+
+      String string = result.toString( "UTF-8" );
       result.flush();
-      return x;
+
+      return string;
    }
 
 
-   protected List<String> loadProperNouns( final String fileName ) throws IOException, URISyntaxException {
-      String properNounsString = new String(
-            Files.readAllBytes( Paths.get( getClass().getClassLoader().getResource( fileName ).toURI() ) ) );
+   protected List<String> loadProperNouns( final String fileName ) {
+      List<String> properNounsList = new ArrayList<>();
 
-      return Collections.unmodifiableList( Arrays.asList( properNounsString.split( System.getProperty( "line.separator" ) ) ) );
+      try {
+         String properNouns = new String( Files.readAllBytes( findPath( fileName ) ) );
+         Arrays.asList( properNouns.split( System.getProperty( "line.separator" ) ) );
+      }
+      catch ( IOException | URISyntaxException e ) {
+         e.printStackTrace();
+      }
+
+      return Collections.unmodifiableList( properNounsList );
    }
 }

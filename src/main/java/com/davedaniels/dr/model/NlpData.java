@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -63,12 +64,18 @@ public class NlpData {
    }
 
 
-   public String toXml() throws Exception {
+   public String toXml() {
       StringWriter sw = new StringWriter();
 
-      Marshaller jaxbMarshaller = JAXBContext.newInstance( NlpData.class ).createMarshaller();
-      jaxbMarshaller.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, true );
-      jaxbMarshaller.marshal( this, sw );
+      Marshaller jaxbMarshaller;
+      try {
+         jaxbMarshaller = JAXBContext.newInstance( NlpData.class ).createMarshaller();
+         jaxbMarshaller.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, true );
+         jaxbMarshaller.marshal( this, sw );
+      }
+      catch ( JAXBException e ) {
+         e.printStackTrace();
+      }
 
       return sw.toString();
    }
