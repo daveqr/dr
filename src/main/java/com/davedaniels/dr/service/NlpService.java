@@ -62,8 +62,8 @@ public class NlpService {
    }
 
    protected List<String> loadProperNouns( final String fileName ) throws IOException, URISyntaxException {
-      String xxx = new String( Files.readAllBytes( Paths.get( getClass().getClassLoader().getResource( fileName ).toURI() ) ) );
+      String properNouns = new String( Files.readAllBytes( Paths.get( getClass().getClassLoader().getResource( fileName ).toURI() ) ) );
 
-      return Arrays.asList( xxx.split( System.getProperty( "line.separator" ) ) );
+      return Arrays.asList( properNouns.split( System.getProperty( "line.separator" ) ) );
    }
 }
