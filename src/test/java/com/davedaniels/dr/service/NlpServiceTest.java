@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
@@ -18,6 +19,7 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.davedaniels.dr.model.NlpData;
+import com.davedaniels.dr.model.NlpSentence;
 
 @RunWith( MockitoJUnitRunner.class )
 public class NlpServiceTest {
@@ -44,24 +46,35 @@ public class NlpServiceTest {
    @Test
    public void process() throws Exception {
       String xml = "abc";
+      String sourceFileName = "123";
+      String properNounsFileName = "234";
+
+      service.setSourceFileName( sourceFileName );
+      service.setProperNounsFileName( properNounsFileName );
 
       ByteArrayOutputStream outContent = new ByteArrayOutputStream();
       PrintStream originalOut = System.out;
       System.setOut( new PrintStream( outContent ) );
 
-      doReturn( data ).when( service ).loadData();
+      List<String> sourceStrings = new ArrayList<>( Arrays.asList( "1", "2" ) );
+      List<String> properNouns = Arrays.asList( "n1", "n2" );
+
+      doReturn( sourceStrings ).when( service ).loadSourceStrings( sourceFileName );
+      doReturn( properNouns ).when( service ).loadProperNouns( properNounsFileName );
+      doReturn( data ).when( service ).aggregateData( sourceStrings, properNouns );
       doReturn( xml ).when( data ).toXml();
-      doReturn( Arrays.asList( "1", "2" ) ).when( data ).findProperNouns();
+      doReturn( properNouns ).when( data ).findProperNouns();
 
       service.process();
 
-      verify( service ).loadData();
+      verify( service ).loadSourceStrings( sourceFileName );
+      verify( service ).loadProperNouns( properNounsFileName );
       verify( data ).toXml();
 
       String expected = xml + System.getProperty( "line.separator" );
       expected += "Found these proper nouns:" + System.getProperty( "line.separator" );
-      expected += "1" + System.getProperty( "line.separator" );
-      expected += "2" + System.getProperty( "line.separator" );
+      expected += "n1" + System.getProperty( "line.separator" );
+      expected += "n2" + System.getProperty( "line.separator" );
 
       Assert.assertEquals( expected, outContent.toString() );
 
@@ -70,29 +83,22 @@ public class NlpServiceTest {
 
 
    @Test
-   public void loadData() throws Exception {
-      String text = "abc";
-      List<String> properNouns = new ArrayList<>();
+   public void loadSourceString_zip() throws Exception {
+      List<String> sourceStrings = service.loadSourceStrings( "nlp-test-data.zip" );
 
-      doReturn( text ).when( service ).loadText( fileName );
-      doReturn( properNouns ).when( service ).loadProperNouns( properNounsFileName );
-
-
-      NlpData expected = new NlpData( text, properNouns );
-      NlpData actual = service.loadData();
-
-      Assert.assertEquals( expected, actual );
-      verify( service ).loadText( fileName );
-      verify( service ).loadProperNouns( properNounsFileName );
+      Collections.sort( sourceStrings );
+      Assert.assertEquals( 2, sourceStrings.size() );
+      Assert.assertTrue( sourceStrings.get( 0 ).contains( "abc 123." ) );
+      Assert.assertTrue( sourceStrings.get( 1 ).contains( "oh for a muse of fire" ) );
    }
 
 
    @Test
-   public void loadTextFromClasspath() throws Exception {
-      String expected = "abc 123";
-      String actual = service.loadText( "test-data.txt" );
+   public void loadSourceString_testFile() throws Exception {
+      List<String> sourceStrings = service.loadSourceStrings( "test-data.txt" );
 
-      Assert.assertEquals( expected, actual );
+      Assert.assertEquals( 1, sourceStrings.size() );
+      Assert.assertTrue( sourceStrings.get( 0 ).contains( "abc 123" ) );
    }
 
 
@@ -102,5 +108,27 @@ public class NlpServiceTest {
 
       Assert.assertEquals( 3, properNouns.size() );
       Assert.assertTrue( properNouns.containsAll( Arrays.asList( "Ernst Haeckel", "Franz Ferdinand", "Gavrilo Princip" ) ) );
+   }
+
+
+   @Test
+   public void aggregateData() throws Exception {
+      List<String> sourceStrings = new ArrayList<>();
+      sourceStrings.addAll( Arrays.asList( "123 abc", "234 def" ) );
+      List<String> properNouns = new ArrayList<>( Arrays.asList( "123", "xxx" ) );
+
+      NlpData data = service.aggregateData( sourceStrings, properNouns );
+
+      Assert.assertEquals( 2, data.getSentences().size() );
+      Assert.assertEquals( 1, data.findProperNouns().size() );
+
+
+      NlpSentence s1 = new NlpSentence( 0, "123 abc" );
+      NlpSentence s2 = new NlpSentence( 0, "234 def" );
+
+      Assert.assertEquals( s1, data.getSentences().get( 0 ) );
+      Assert.assertEquals( s2, data.getSentences().get( 1 ) );
+
+      data.findProperNouns().contains( "123" );
    }
 }

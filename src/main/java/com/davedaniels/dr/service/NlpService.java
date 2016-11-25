@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -108,7 +107,7 @@ public class NlpService {
             final ZipEntry entry = entries.nextElement();
 
             // Some extra Mac weirdness in the zip
-            if ( !entry.isDirectory() && !entry.getName().contains( "__MACOSX" ) ) {
+            if ( !entry.isDirectory() && !entry.getName().contains( "__MACOSX" ) && !entry.getName().contains( "DS_Store" ) ) {
                sourceStrings.add( convertInputStreamToString( zipFile.getInputStream( entry ) ) );
             }
          }
@@ -119,7 +118,7 @@ public class NlpService {
          sourceStrings.add( new String( Files.readAllBytes( path ) ) );
       }
 
-      return Collections.unmodifiableList( sourceStrings );
+      return sourceStrings;
    }
 
 
@@ -149,12 +148,12 @@ public class NlpService {
 
       try {
          String properNouns = new String( Files.readAllBytes( findPath( fileName ) ) );
-         Arrays.asList( properNouns.split( System.getProperty( "line.separator" ) ) );
+         properNounsList.addAll( Arrays.asList( properNouns.split( System.getProperty( "line.separator" ) ) ) );
       }
       catch ( IOException | URISyntaxException e ) {
          e.printStackTrace();
       }
 
-      return Collections.unmodifiableList( properNounsList );
+      return properNounsList;
    }
 }
