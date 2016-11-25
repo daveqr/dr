@@ -14,33 +14,16 @@ public class NlpSentence {
 
    private List<String> words = new ArrayList<>();
 
+   @XmlElementWrapper( name = "properNouns" )
+   @XmlElement( name = "noun" )
+   private List<String> properNouns = new ArrayList<>();
+
    private String sentence;
 
    public NlpSentence() {
 
    }
 
-   @Override
-   public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + boundary;
-      result = prime * result + ((sentence == null) ? 0 : sentence.hashCode());
-      return result;
-   }
-
-   @Override
-   public boolean equals( Object obj ) {
-      if ( this == obj ) return true;
-      if ( obj == null ) return false;
-      if ( getClass() != obj.getClass() ) return false;
-      NlpSentence other = (NlpSentence) obj;
-      if ( boundary != other.boundary ) return false;
-      if ( sentence == null ) {
-         if ( other.sentence != null ) return false;
-      } else if ( !sentence.equals( other.sentence ) ) return false;
-      return true;
-   }
 
    public NlpSentence( int boundary, String sentence ) {
       this.boundary = boundary;
@@ -67,6 +50,7 @@ public class NlpSentence {
    public void setWords( List<String> words ) {
       this.words = words;
    }
+
 
    public List<String> getWords() {
       if ( words == null || words.isEmpty() ) {
@@ -97,5 +81,43 @@ public class NlpSentence {
       }
 
       return words;
+   }
+
+
+   public void addProperNouns( List<String> canonicalNouns ) {
+      for ( String noun : canonicalNouns ) {
+         if ( sentence.contains( noun ) ) {
+            properNouns.add( noun );
+         }
+      }
+   }
+   
+
+   public List<String> getProperNouns() {
+      return properNouns;
+   }
+   
+   
+   @Override
+   public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + boundary;
+      result = prime * result + ((sentence == null) ? 0 : sentence.hashCode());
+      return result;
+   }
+
+
+   @Override
+   public boolean equals( Object obj ) {
+      if ( this == obj ) return true;
+      if ( obj == null ) return false;
+      if ( getClass() != obj.getClass() ) return false;
+      NlpSentence other = (NlpSentence) obj;
+      if ( boundary != other.boundary ) return false;
+      if ( sentence == null ) {
+         if ( other.sentence != null ) return false;
+      } else if ( !sentence.equals( other.sentence ) ) return false;
+      return true;
    }
 }

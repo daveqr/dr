@@ -14,6 +14,81 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class NlpData {
 
+   private List<String> properNouns = new ArrayList<>();
+
+   private List<NlpSentence> sentences = new ArrayList<>();
+
+
+   public NlpData( String text, List<String> properNouns ) {
+      this.properNouns = properNouns;
+
+      parseSentences( text );
+      addProperNounsToSentences();
+   }
+
+
+   public NlpData() {}
+
+   
+   public void setProperNouns( List<String> properNouns ) {
+      this.properNouns = properNouns;
+   }
+   
+   
+   public List<String> findProperNouns() {
+      List<String> foundNouns = new ArrayList<>();
+      for ( NlpSentence sentence : sentences ) {
+         foundNouns.addAll( sentence.getProperNouns() );
+      }
+
+      return foundNouns;
+   }
+
+
+   @XmlElementWrapper( name = "sentences" )
+   @XmlElement( name = "sentence" )
+   public List<NlpSentence> getSentences() {
+      return sentences;
+   }
+
+
+   public void setSentences( List<NlpSentence> sentences ) {
+      this.sentences = sentences;
+   }
+
+
+   public String toXml() throws Exception {
+      StringWriter sw = new StringWriter();
+
+      Marshaller jaxbMarshaller = JAXBContext.newInstance( NlpData.class ).createMarshaller();
+      jaxbMarshaller.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, true );
+      jaxbMarshaller.marshal( this, sw );
+
+      return sw.toString();
+   }
+
+
+   protected void parseSentences( final String text ) {
+      BreakIterator iterator = BreakIterator.getSentenceInstance();
+      iterator.setText( text );
+
+      int begin, end;
+      begin = end = iterator.first();
+
+      while ( begin != BreakIterator.DONE ) {
+         if ( (end = iterator.next()) != BreakIterator.DONE ) {
+            sentences.add( new NlpSentence( begin, text.substring( begin, end ) ) );
+         }
+
+         begin = end;
+      }
+   }
+
+   protected void addProperNounsToSentences() {
+      for ( NlpSentence sentence : sentences ) {
+         sentence.addProperNouns( properNouns );
+      }
+   }
 
    @Override
    public int hashCode() {
@@ -34,55 +109,5 @@ public class NlpData {
          if ( other.sentences != null ) return false;
       } else if ( !sentences.equals( other.sentences ) ) return false;
       return true;
-   }
-
-
-   public NlpData( String text ) {
-      this.sentences = this.parseSentences( text );
-   }
-
-
-   public NlpData() {}
-
-
-   @XmlElementWrapper( name = "sentences" )
-   @XmlElement( name = "sentence" )
-   private List<NlpSentence> sentences = new ArrayList<>();
-
-
-   public void setSentences( List<NlpSentence> sentences ) {
-      this.sentences = sentences;
-   }
-
-
-   public String toXml() throws Exception {
-      StringWriter sw = new StringWriter();
-
-      Marshaller jaxbMarshaller = JAXBContext.newInstance( NlpData.class ).createMarshaller();
-      jaxbMarshaller.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, true );
-      jaxbMarshaller.marshal( this, sw );
-
-      return sw.toString();
-   }
-
-
-   protected List<NlpSentence> parseSentences( final String text ) {
-      List<NlpSentence> sentences = new ArrayList<>();
-
-      BreakIterator iterator = BreakIterator.getSentenceInstance();
-      iterator.setText( text );
-
-      int begin, end;
-      begin = end = iterator.first();
-
-      while ( begin != BreakIterator.DONE ) {
-         if ( (end = iterator.next()) != BreakIterator.DONE ) {
-            sentences.add( new NlpSentence( begin, text.substring( begin, end ) ) );
-         }
-
-         begin = end;
-      }
-
-      return sentences;
    }
 }

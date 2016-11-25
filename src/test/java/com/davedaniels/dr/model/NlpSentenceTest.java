@@ -66,4 +66,14 @@ public class NlpSentenceTest {
       Assert.assertTrue( actual.containsAll( Arrays.asList( "Abc", "123", "Hello", "goodbye" ) ) );
    }
 
+   @Test
+   public void addProperNouns() {
+      sentence.setSentence( "2 is the sentence" );
+      sentence.addProperNouns( Arrays.asList( "1", "2" ) );
+
+      List<String> properNouns = sentence.getProperNouns();
+
+      Assert.assertEquals( 1, properNouns.size() );
+      Assert.assertTrue( properNouns.contains( "2" ) );
+   }
 }

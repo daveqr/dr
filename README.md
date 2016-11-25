@@ -12,6 +12,7 @@ This library requires the following:
 Clone the project from GitHub.
 
     $ git clone https://github.com/daveqr/dr.git
+    $ git checkout ex-2
 
 ## Usage
 From the project directory, run:
@@ -25,13 +26,9 @@ From the project directory, run:
 
 ## Assumptions
 
-* The file exists on the Classpath.
-* The file contains data, and the data meets reasonable constraint expectations.
-* The default Locale is US.
-* Helper methods in the service are protected for testing.
-* The sentence boundary and word tokenization tests are limited. There are probably more conditions which should be tested, including null tests.
+* The assumptions for ex-1 are true for ex-2.
 * In a real-world situation, I would have clarified some of the requirements with the customer.
 
 ## Limitations
 
-One major limitation to the current implementation is the service expects the source file to be at the root of the Classpath. This restricts its usefulness in real-world scenarios, where data might be from a database, a generated String or any number of other sources, and might be used in different contexts. As it is written the NlpService serves mainly to load the model and print the XML.
+The code for ex-2 is not all that different than ex-1, so the same limitations hold.
