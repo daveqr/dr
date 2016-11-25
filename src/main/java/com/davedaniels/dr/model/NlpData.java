@@ -1,3 +1,4 @@
+/* Copyright (c) 2016 Dave Daniels */
 package com.davedaniels.dr.model;
 
 import java.io.StringWriter;
@@ -13,6 +14,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Represents a natural language text block.
+ * 
+ * @since 1.0.0
+ */
 @XmlRootElement
 public class NlpData {
 

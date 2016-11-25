@@ -1,3 +1,4 @@
+/* Copyright (c) 2016 Dave Daniels */
 package com.davedaniels.dr.model;
 
 import java.text.BreakIterator;
@@ -7,6 +8,11 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
+/**
+ * Represents a natural language sentence.
+ * 
+ * @since 1.0.0
+ */
 public class NlpSentence {
 
    private int boundary;

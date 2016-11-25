@@ -1,3 +1,4 @@
+/* Copyright (c) 2016 Dave Daniels */
 package com.davedaniels.dr.service;
 
 import java.io.ByteArrayOutputStream;
@@ -23,6 +24,11 @@ import java.util.zip.ZipFile;
 
 import com.davedaniels.dr.model.NlpData;
 
+/**
+ * Text processing service.
+ * 
+ * @since 1.0.0
+ */
 public class NlpService {
 
    private String sourceFileName;
@@ -46,7 +52,11 @@ public class NlpService {
       this.properNounsFileName = properNounsFileName;
    }
 
-
+   /**
+    * Process {@link #sourceFileName} and writes the XML representation to {@link System#out}.
+    * 
+    * @throws Exception
+    */
    public void process() throws Exception {
       NlpData data = aggregateData( loadSourceStrings( sourceFileName ), loadProperNouns( properNounsFileName ) );
 
