@@ -36,7 +36,7 @@ public class NlpServiceTest {
 
    @Before
    public void before() {
-      service.setFileName( fileName );
+      service.setSourceFileName( fileName );
       service.setProperNounsFileName( properNounsFileName );
    }
 

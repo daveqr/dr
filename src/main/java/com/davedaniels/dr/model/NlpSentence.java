@@ -4,7 +4,6 @@ import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
@@ -30,14 +29,16 @@ public class NlpSentence {
       this.sentence = sentence;
    }
 
-   @XmlAttribute
+
    public int getBoundary() {
       return boundary;
    }
 
+
    public void setSentence( String sentence ) {
       this.sentence = sentence;
    }
+
 
    @XmlElement( name = "value" )
    public String getSentence() {
@@ -91,13 +92,13 @@ public class NlpSentence {
          }
       }
    }
-   
+
 
    public List<String> getProperNouns() {
       return properNouns;
    }
-   
-   
+
+
    @Override
    public int hashCode() {
       final int prime = 31;

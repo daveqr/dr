@@ -1,11 +1,25 @@
 package com.davedaniels.dr.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import com.davedaniels.dr.model.NlpData;
 
@@ -15,26 +29,26 @@ public class NlpService {
 
    private String properNounsFileName;
 
-   private NlpData data;
-
-   public NlpService() {
-      sourceFileName = "nlp_data.txt";
+   public NlpService() throws IOException, URISyntaxException {
+      // sourceFileName would probably be injected
+      // sourceFileName = "nlp_data.txt";
+      sourceFileName = "nlp_data.zip";
       properNounsFileName = "NER.txt";
    }
 
 
-   public void setFileName( String fileName ) {
-      this.sourceFileName = fileName;
+   public void setSourceFileName( final String sourceFileName ) {
+      this.sourceFileName = sourceFileName;
    }
 
 
-   public void setProperNounsFileName( String properNounsFileName ) {
+   public void setProperNounsFileName( final String properNounsFileName ) {
       this.properNounsFileName = properNounsFileName;
    }
 
 
    public void process() throws Exception {
-      data = loadData();
+      NlpData data = aggregateData( loadSourceStrings( sourceFileName ), loadProperNouns( properNounsFileName ) );
 
       String xml = data.toXml();
       List<String> foundNouns = data.findProperNouns();
@@ -47,23 +61,75 @@ public class NlpService {
    }
 
 
-   protected NlpData loadData() throws IOException, URISyntaxException {
-      List<String> properNouns = loadProperNouns( properNounsFileName );
-      String text = loadText( sourceFileName );
+   protected NlpData aggregateData( final List<String> sourceStrings, final List<String> properNouns )
+         throws InterruptedException, ExecutionException {
+      List<Callable<NlpData>> tasks = new ArrayList<>();
+      ExecutorService executorPool = Executors.newFixedThreadPool( 5 );
 
-      NlpData data = new NlpData( text, properNouns );
+      for ( final String text : sourceStrings ) {
+         tasks.add( new Callable<NlpData>() {
+
+            @Override
+            public NlpData call() throws Exception {
+               return new NlpData( text, properNouns );
+            }
+         } );
+      }
+
+      NlpData data = new NlpData( properNouns );
+      for ( Future<NlpData> future : executorPool.invokeAll( tasks ) ) {
+         data.getSentences().addAll( future.get().getSentences() );
+      }
+
+      executorPool.shutdown();
 
       return data;
    }
 
 
-   protected String loadText( final String fileName ) throws IOException, URISyntaxException {
-      return new String( Files.readAllBytes( Paths.get( getClass().getClassLoader().getResource( fileName ).toURI() ) ) );
+   protected List<String> loadSourceStrings( final String fileName ) throws Exception {
+      List<String> sourceStrings = new ArrayList<>();
+
+      Path path = Paths.get( getClass().getClassLoader().getResource( fileName ).toURI() );
+      try (ZipFile zipFile = new ZipFile( path.toFile() )) {
+         final Enumeration<? extends ZipEntry> entries = zipFile.entries();
+         while ( entries.hasMoreElements() ) {
+            final ZipEntry entry = entries.nextElement();
+
+            // Some extra mac weirdness in the zip
+            if ( !entry.isDirectory() && !entry.getName().contains( "__MACOSX" ) ) {
+               sourceStrings.add( convertInputStreamToString( zipFile.getInputStream( entry ) ) );
+            }
+         }
+      }
+      catch ( ZipException e ) {
+         // this just means it's a text file, not a zip file
+
+         sourceStrings.add( new String( Files.readAllBytes( path ) ) );
+      }
+
+      return Collections.unmodifiableList( sourceStrings );
    }
 
-   protected List<String> loadProperNouns( final String fileName ) throws IOException, URISyntaxException {
-      String properNouns = new String( Files.readAllBytes( Paths.get( getClass().getClassLoader().getResource( fileName ).toURI() ) ) );
 
-      return Arrays.asList( properNouns.split( System.getProperty( "line.separator" ) ) );
+   // Would probably use a helper library for this in situ
+   private String convertInputStreamToString( final InputStream inputStream ) throws IOException {
+      ByteArrayOutputStream result = new ByteArrayOutputStream();
+      byte[] buffer = new byte[1024];
+      int length;
+      while ( (length = inputStream.read( buffer )) != -1 ) {
+         result.write( buffer, 0, length );
+      }
+      String x = result.toString( "UTF-8" );
+      result.flush();
+      return x;
+   }
+
+
+   protected List<String> loadProperNouns( final String fileName ) throws IOException, URISyntaxException {
+      String properNounsString = new String(
+            Files.readAllBytes( Paths.get( getClass().getClassLoader().getResource( fileName ).toURI() ) ) );
+
+      return Collections.unmodifiableList( Arrays.asList( properNounsString.split( System.getProperty( "line.separator" ) ) ) );
    }
 }

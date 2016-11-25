@@ -3,6 +3,7 @@ package com.davedaniels.dr.model;
 import java.io.StringWriter;
 import java.text.BreakIterator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -27,21 +28,26 @@ public class NlpData {
    }
 
 
+   public NlpData( List<String> properNouns ) {
+      this.properNouns = properNouns;
+   }
+
+
    public NlpData() {}
 
-   
+
    public void setProperNouns( List<String> properNouns ) {
       this.properNouns = properNouns;
    }
-   
-   
+
+
    public List<String> findProperNouns() {
       List<String> foundNouns = new ArrayList<>();
       for ( NlpSentence sentence : sentences ) {
          foundNouns.addAll( sentence.getProperNouns() );
       }
 
-      return foundNouns;
+      return Collections.unmodifiableList( foundNouns );
    }
 
 
