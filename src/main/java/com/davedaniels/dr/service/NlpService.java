@@ -72,12 +72,8 @@ public class NlpService {
       ExecutorService executorPool = Executors.newFixedThreadPool( 5 );
 
       for ( String text : sourceStrings ) {
-         tasks.add( new Callable<NlpData>() {
-
-            @Override
-            public NlpData call() throws Exception {
-               return new NlpData( text, properNouns );
-            }
+         tasks.add( () -> {
+            return new NlpData( text, properNouns );
          } );
       }
 
