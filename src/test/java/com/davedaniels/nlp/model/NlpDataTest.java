@@ -1,4 +1,4 @@
-package com.davedaniels.dr.model;
+package com.davedaniels.nlp.model;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -15,6 +15,9 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.diff.Diff;
+
+import com.davedaniels.nlp.model.NlpData;
+import com.davedaniels.nlp.model.NlpSentence;
 
 @RunWith( MockitoJUnitRunner.class )
 public class NlpDataTest {

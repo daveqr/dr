@@ -1,5 +1,5 @@
 /* Copyright (c) 2016 Dave Daniels */
-package com.davedaniels.dr.service;
+package com.davedaniels.nlp.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import com.davedaniels.dr.model.NlpData;
+import com.davedaniels.nlp.model.NlpData;
 
 /**
  * Text processing service.

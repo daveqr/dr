@@ -1,7 +1,7 @@
 /* Copyright (c) 2016 Dave Daniels */
-package com.davedaniels.dr;
+package com.davedaniels.nlp;
 
-import com.davedaniels.dr.service.NlpService;
+import com.davedaniels.nlp.service.NlpService;
 
 /**
  * Application entry point.

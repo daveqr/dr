@@ -1,5 +1,5 @@
 /* Copyright (c) 2016 Dave Daniels */
-package com.davedaniels.dr.model;
+package com.davedaniels.nlp.model;
 
 import java.io.StringWriter;
 import java.text.BreakIterator;

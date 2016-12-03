@@ -1,4 +1,4 @@
-package com.davedaniels.dr.service;
+package com.davedaniels.nlp.service;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -18,8 +18,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.davedaniels.dr.model.NlpData;
-import com.davedaniels.dr.model.NlpSentence;
+import com.davedaniels.nlp.model.NlpData;
+import com.davedaniels.nlp.model.NlpSentence;
+import com.davedaniels.nlp.service.NlpService;
 
 @RunWith( MockitoJUnitRunner.class )
 public class NlpServiceTest {

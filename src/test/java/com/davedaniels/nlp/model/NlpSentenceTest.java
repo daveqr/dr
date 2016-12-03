@@ -1,4 +1,4 @@
-package com.davedaniels.dr.model;
+package com.davedaniels.nlp.model;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.davedaniels.nlp.model.NlpSentence;
 
 @RunWith( MockitoJUnitRunner.class )
 public class NlpSentenceTest {
