@@ -70,23 +70,24 @@ public class NlpService {
 
    protected NlpData aggregateData( final List<String> sourceStrings, final List<String> properNouns ) {
       ExecutorService executorPool = Executors.newFixedThreadPool( 5 );
-
-      final NlpData data = new NlpData( properNouns );
-
-      List<CompletableFuture<NlpData>> futures = sourceStrings.stream()
-            .map( text -> CompletableFuture.supplyAsync( () -> new NlpData( text, properNouns ), executorPool ) )
-            .collect( Collectors.<CompletableFuture<NlpData>> toList() );
+      NlpData data = new NlpData( properNouns );
 
       try {
+         List<CompletableFuture<NlpData>> futures = sourceStrings.stream()
+               .map( text -> CompletableFuture.supplyAsync( () -> new NlpData( text, properNouns ), executorPool ) )
+               .collect( Collectors.<CompletableFuture<NlpData>> toList() );
+
          for ( Future<NlpData> future : futures ) {
             data.getSentences().addAll( future.get().getSentences() );
          }
+
       }
       catch ( InterruptedException | ExecutionException e ) {
          e.printStackTrace();
       }
-
-      executorPool.shutdown();
+      finally {
+         executorPool.shutdown();
+      }
 
       return data;
    }
