@@ -23,7 +23,6 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import com.davedaniels.dr.model.NlpData;
-import com.davedaniels.dr.model.NlpSentence;
 
 /**
  * Text processing service.
