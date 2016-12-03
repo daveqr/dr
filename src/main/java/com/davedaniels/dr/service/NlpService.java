@@ -73,17 +73,9 @@ public class NlpService {
       NlpData data = new NlpData( properNouns );
 
       try {
-         List<CompletableFuture<NlpData>> futures = sourceStrings.stream()
+         sourceStrings.stream()
                .map( text -> CompletableFuture.supplyAsync( () -> new NlpData( text, properNouns ), executorPool ) )
-               .collect( Collectors.<CompletableFuture<NlpData>> toList() );
-
-         for ( Future<NlpData> future : futures ) {
-            data.getSentences().addAll( future.get().getSentences() );
-         }
-
-      }
-      catch ( InterruptedException | ExecutionException e ) {
-         e.printStackTrace();
+               .forEach( future -> data.getSentences().addAll( future.join().getSentences() ) );
       }
       finally {
          executorPool.shutdown();
