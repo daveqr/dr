@@ -70,9 +70,10 @@ public class NlpService {
       NlpData data = new NlpData( properNouns );
 
       try {
-         sourceStrings.stream()
-               .map( text -> CompletableFuture.supplyAsync( () -> new NlpData( text, properNouns ), executorPool ) )
-               .forEach( future -> data.getSentences().addAll( future.join().getSentences() ) );
+         sourceStrings
+            .stream()
+            .map( text -> CompletableFuture.supplyAsync( () -> new NlpData( text, properNouns ), executorPool ) )
+            .forEach( future -> data.getSentences().addAll( future.join().getSentences() ) );
       }
       finally {
          executorPool.shutdown();
