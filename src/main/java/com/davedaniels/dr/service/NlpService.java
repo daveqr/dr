@@ -12,16 +12,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import com.davedaniels.dr.model.NlpData;
+import com.davedaniels.dr.model.NlpSentence;
 
 /**
  * Text processing service.
@@ -68,18 +70,16 @@ public class NlpService {
 
 
    protected NlpData aggregateData( final List<String> sourceStrings, final List<String> properNouns ) {
-      List<Callable<NlpData>> tasks = new ArrayList<>();
       ExecutorService executorPool = Executors.newFixedThreadPool( 5 );
 
-      for ( String text : sourceStrings ) {
-         tasks.add( () -> {
-            return new NlpData( text, properNouns );
-         } );
-      }
+      final NlpData data = new NlpData( properNouns );
 
-      NlpData data = new NlpData( properNouns );
+      List<CompletableFuture<NlpData>> futures = sourceStrings.stream()
+            .map( text -> CompletableFuture.supplyAsync( () -> new NlpData( text, properNouns ), executorPool ) )
+            .collect( Collectors.<CompletableFuture<NlpData>> toList() );
+
       try {
-         for ( Future<NlpData> future : executorPool.invokeAll( tasks ) ) {
+         for ( Future<NlpData> future : futures ) {
             data.getSentences().addAll( future.get().getSentences() );
          }
       }
