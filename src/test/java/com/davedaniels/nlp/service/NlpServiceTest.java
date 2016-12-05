@@ -20,14 +20,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.davedaniels.nlp.model.NlpData;
 import com.davedaniels.nlp.model.NlpSentence;
-import com.davedaniels.nlp.service.NlpService;
+import com.davedaniels.nlp.service.NlpSentenceService;
 
 @RunWith( MockitoJUnitRunner.class )
 public class NlpServiceTest {
 
    @Spy
    @InjectMocks
-   private NlpService service;
+   private NlpSentenceService service;
 
    @Spy
    private NlpData data;

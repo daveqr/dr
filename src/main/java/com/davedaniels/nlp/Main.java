@@ -7,6 +7,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.davedaniels.nlp.model.NlpData;
 import com.davedaniels.nlp.service.NlpService;
+import com.davedaniels.nlp.service.NlpSentenceService;
 
 /**
  * Application entry point.
@@ -24,7 +25,7 @@ public class Main {
          ctx.register( AppConfig.class );
          ctx.refresh();
 
-         NlpService service = ctx.getBean( NlpService.class );
+         NlpService service = ctx.getBean( NlpSentenceService.class );
          NlpData data = service.process();
 
          LOG.info( data.toXml() );
