@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -20,10 +21,11 @@ import org.springframework.stereotype.Repository;
  * 
  * @since 1.0.0
  */
+@Primary
 @Repository( "fileDictionaryDao" )
 public class FileDictionaryDao implements DictionaryDao {
 
-    private static final Logger LOG = LogManager.getLogger( FileDictionaryDao.class );
+   private static final Logger LOG = LogManager.getLogger( FileDictionaryDao.class );
 
    @Value( "${file.dictionary}" )
    private String fileName;
@@ -42,7 +44,7 @@ public class FileDictionaryDao implements DictionaryDao {
          properNounsList.addAll( Arrays.asList( properNouns.split( System.getProperty( "line.separator" ) ) ) );
       }
       catch ( IOException | URISyntaxException e ) {
-          LOG.error( "Problem loading dictionary.", e );
+         LOG.error( "Problem loading dictionary.", e );
       }
 
       return properNounsList;

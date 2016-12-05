@@ -15,5 +15,5 @@ public interface SourceStringDao {
     * @return a List of source strings
     * @throws Exception
     */
-   public List<String> loadSourceStrings( ) throws Exception;
+   public List<String> loadSourceStrings() throws Exception;
 }
