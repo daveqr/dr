@@ -48,7 +48,7 @@ public class NlpService {
     * @throws Exception
     */
    public NlpData process() throws Exception {
-      LOG.debug( "Beginning String process" );
+       LOG.debug( "Beginning String process" );
       return aggregateData( dao.loadSourceStrings(), dictionaryDao.loadProperNouns() );
    }
 

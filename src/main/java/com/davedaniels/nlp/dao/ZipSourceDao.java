@@ -17,14 +17,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
-import com.davedaniels.nlp.service.NlpService;
 import com.google.common.io.CharStreams;
 
 @Primary
 @Repository( "zipSourceDao" )
 public class ZipSourceDao implements SourceStringDao {
 
-   private static final Logger LOG = LogManager.getLogger( NlpService.class );
+   private static final Logger LOG = LogManager.getLogger( ZipSourceDao.class );
 
    @Value( "${file.zip}" )
    private String fileName;
