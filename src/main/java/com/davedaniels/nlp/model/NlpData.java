@@ -110,12 +110,14 @@ public class NlpData {
       }
    }
 
+   
    protected void addProperNounsToSentences() {
       for ( NlpSentence sentence : sentences ) {
          sentence.addProperNouns( properNouns );
       }
    }
 
+   
    @Override
    public int hashCode() {
       final int prime = 31;
