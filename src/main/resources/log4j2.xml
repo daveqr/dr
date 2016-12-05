@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+	<Properties>
+		<Property name="filename">nlp-lib.log
+		</Property>
+	</Properties>
+
+	<Appenders>
+		<Console name="ShellConsole" target="SYSTEM_OUT">
+			<PatternLayout pattern="%msg%n" />
+		</Console>
+
+		<File name="File" fileName="${filename}">
+			<PatternLayout>
+				<Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+				</Pattern>
+			</PatternLayout>
+		</File>
+	</Appenders>
+	<Loggers>
+		<Root level="DEBUG">
+			<AppenderRef ref="File" />
+			<AppenderRef level="INFO" ref="ShellConsole" />
+		</Root>
+	</Loggers>
+</Configuration>

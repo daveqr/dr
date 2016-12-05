@@ -60,7 +60,7 @@ public class NlpServiceTest {
       List<String> sourceStrings = new ArrayList<>( Arrays.asList( "1", "2" ) );
       List<String> properNouns = Arrays.asList( "n1", "n2" );
 
-      doReturn( sourceStrings ).when( service ).loadSourceStrings( sourceFileName );
+      doReturn( sourceStrings ).when( service ).loadSourceStrings( );
       doReturn( properNouns ).when( service ).loadProperNouns( properNounsFileName );
       doReturn( data ).when( service ).aggregateData( sourceStrings, properNouns );
       doReturn( xml ).when( data ).toXml();
@@ -68,7 +68,7 @@ public class NlpServiceTest {
 
       service.process();
 
-      verify( service ).loadSourceStrings( sourceFileName );
+      verify( service ).loadSourceStrings( );
       verify( service ).loadProperNouns( properNounsFileName );
       verify( data ).toXml();
 
@@ -85,7 +85,7 @@ public class NlpServiceTest {
 
    @Test
    public void loadSourceString_zip() throws Exception {
-      List<String> sourceStrings = service.loadSourceStrings( "nlp-test-data.zip" );
+      List<String> sourceStrings = service.loadSourceStrings( );
 
       Collections.sort( sourceStrings );
       Assert.assertEquals( 2, sourceStrings.size() );
@@ -96,7 +96,7 @@ public class NlpServiceTest {
 
    @Test
    public void loadSourceString_testFile() throws Exception {
-      List<String> sourceStrings = service.loadSourceStrings( "test-data.txt" );
+      List<String> sourceStrings = service.loadSourceStrings( );
 
       Assert.assertEquals( 1, sourceStrings.size() );
       Assert.assertTrue( sourceStrings.get( 0 ).contains( "abc 123" ) );
