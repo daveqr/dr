@@ -14,6 +14,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.davedaniels.nlp.Main;
+
 /**
  * Represents a natural language text block.
  * 
@@ -21,6 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class NlpData {
+
+   private static final Logger LOG = LogManager.getLogger( Main.class );
 
    private List<String> properNouns = new ArrayList<>();
 
@@ -80,7 +87,7 @@ public class NlpData {
          jaxbMarshaller.marshal( this, sw );
       }
       catch ( JAXBException e ) {
-         e.printStackTrace();
+         LOG.error( "Problem marshelling", e );
       }
 
       return sw.toString();
