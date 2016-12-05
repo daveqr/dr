@@ -1,3 +1,4 @@
+/* Copyright (c) 2016 Dave Daniels */
 package com.davedaniels.nlp.dao;
 
 import java.io.InputStreamReader;
@@ -19,6 +20,11 @@ import org.springframework.stereotype.Repository;
 
 import com.google.common.io.CharStreams;
 
+/**
+ * Loads source strings from a zip file for processing.
+ * 
+ * @since 1.0.0
+ */
 @Primary
 @Repository( "zipSourceDao" )
 public class ZipSourceDao implements SourceStringDao {

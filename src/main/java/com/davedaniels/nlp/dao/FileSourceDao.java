@@ -1,3 +1,4 @@
+/* Copyright (c) 2016 Dave Daniels */
 package com.davedaniels.nlp.dao;
 
 import java.net.URISyntaxException;
@@ -10,6 +11,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Loads single source string from a text file for processing.
+ * 
+ * @since 1.0.0
+ */
 @Repository( "fileSourceDao" )
 public class FileSourceDao implements SourceStringDao {
 

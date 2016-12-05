@@ -16,7 +16,7 @@ import com.davedaniels.nlp.dao.SourceStringDao;
 import com.davedaniels.nlp.model.NlpData;
 
 /**
- * Text processing service.
+ * Sentence processing service.
  * 
  * @since 1.0.0
  */
@@ -42,9 +42,6 @@ public class NlpSentenceService implements NlpService {
    }
 
 
-   /* (non-Javadoc)
-    * @see com.davedaniels.nlp.service.NlpService#process()
-    */
    @Override
    public NlpData process() throws Exception {
        LOG.debug( "Beginning String process" );
