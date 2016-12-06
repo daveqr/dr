@@ -14,10 +14,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.davedaniels.nlp.Main;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a natural language text block.
@@ -27,7 +25,7 @@ import com.davedaniels.nlp.Main;
 @XmlRootElement
 public class NlpData {
 
-   private static final Logger LOG = LogManager.getLogger( Main.class );
+   private static final Logger LOG = LoggerFactory.getLogger( NlpData.class );
 
    private List<String> properNouns = new ArrayList<>();
 
@@ -110,14 +108,14 @@ public class NlpData {
       }
    }
 
-   
+
    protected void addProperNounsToSentences() {
       for ( NlpSentence sentence : sentences ) {
          sentence.addProperNouns( properNouns );
       }
    }
 
-   
+
    @Override
    public int hashCode() {
       final int prime = 31;

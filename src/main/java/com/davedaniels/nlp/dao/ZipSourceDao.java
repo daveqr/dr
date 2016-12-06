@@ -12,8 +12,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -29,7 +29,7 @@ import com.google.common.io.CharStreams;
 @Repository( "zipSourceDao" )
 public class ZipSourceDao implements SourceStringDao {
 
-   private static final Logger LOG = LogManager.getLogger( ZipSourceDao.class );
+   private static final Logger LOG = LoggerFactory.getLogger( ZipSourceDao.class );
 
    @Value( "${file.zip}" )
    private String fileName;
