@@ -8,33 +8,26 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
-import com.davedaniels.nlp.model.NlpData;
-import com.davedaniels.nlp.service.NlpSentenceService;
+import com.davedaniels.nlp.main.App;
 
 /**
- * Application entry point.
+ * Application smoke test runner. It's only purpose it to kick off the app.
  * 
  * @since 1.0.0
  */
 @SpringBootApplication
-public class App implements ApplicationRunner {
+public class SmokeTest implements ApplicationRunner {
 
    @Autowired
    private ApplicationContext ctx;
 
    public static void main( String[] args ) {
-      SpringApplication.run( App.class, args );
+      SpringApplication.run( SmokeTest.class, args );
    }
 
 
    @Override
    public void run( ApplicationArguments arg0 ) throws Exception {
-      NlpData data = ctx.getBean( NlpSentenceService.class ).process();
-
-      System.out.println( data.toXml() );
-      for ( String noun : data.findProperNouns() ) {
-         System.out.println( noun );
-      }
+      ctx.getBean( App.class ).entry();
    }
-
 }

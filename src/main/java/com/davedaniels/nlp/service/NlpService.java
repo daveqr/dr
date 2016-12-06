@@ -1,6 +1,8 @@
 /* Copyright (c) 2016 Dave Daniels */
 package com.davedaniels.nlp.service;
 
+import java.util.List;
+
 import com.davedaniels.nlp.model.NlpData;
 
 /**
@@ -15,6 +17,5 @@ public interface NlpService {
     * 
     * @throws Exception
     */
-   NlpData process() throws Exception;
-
+   NlpData process( List<String> sourceStrings ) throws Exception;
 }

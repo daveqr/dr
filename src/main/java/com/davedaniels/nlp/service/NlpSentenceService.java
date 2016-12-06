@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.davedaniels.nlp.dao.DictionaryDao;
-import com.davedaniels.nlp.dao.SourceStringDao;
 import com.davedaniels.nlp.model.NlpData;
 
 /**
@@ -26,15 +25,7 @@ public class NlpSentenceService implements NlpService {
    private static final Logger LOG = LoggerFactory.getLogger( NlpSentenceService.class );
 
    @Autowired
-   private SourceStringDao dao;
-
-   @Autowired
    private DictionaryDao dictionaryDao;
-
-
-   public void setDao( SourceStringDao dao ) {
-      this.dao = dao;
-   }
 
 
    public void setDictionaryDao( DictionaryDao dictionaryDao ) {
@@ -43,9 +34,9 @@ public class NlpSentenceService implements NlpService {
 
 
    @Override
-   public NlpData process() throws Exception {
+   public NlpData process( List<String> sourceStrings ) throws Exception {
       LOG.debug( "Beginning String process" );
-      return aggregateData( dao.loadSourceStrings(), dictionaryDao.loadProperNouns() );
+      return aggregateData( sourceStrings, dictionaryDao.loadProperNouns() );
    }
 
 
