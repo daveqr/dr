@@ -8,7 +8,7 @@ import java.util.List;
  * 
  * @since 1.0.0
  */
-public interface SourceStringDao {
+public interface SourceDao {
 
    /**
     * 

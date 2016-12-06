@@ -1,0 +1,1 @@
+INSERT INTO documents VALUES (1, null);

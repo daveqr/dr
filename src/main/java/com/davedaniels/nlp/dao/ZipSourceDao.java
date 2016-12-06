@@ -27,7 +27,7 @@ import com.google.common.io.CharStreams;
  */
 @Primary
 @Repository( "zipSourceDao" )
-public class ZipSourceDao implements SourceStringDao {
+public class ZipSourceDao implements SourceDao {
 
    private static final Logger LOG = LoggerFactory.getLogger( ZipSourceDao.class );
 

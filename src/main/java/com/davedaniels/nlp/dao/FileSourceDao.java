@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
  * @since 1.0.0
  */
 @Repository( "fileSourceDao" )
-public class FileSourceDao implements SourceStringDao {
+public class FileSourceDao implements SourceDao {
 
    @Value( "${file.single}" )
    private String fileName;

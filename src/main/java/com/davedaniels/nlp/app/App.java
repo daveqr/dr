@@ -1,12 +1,12 @@
 /* Copyright (c) 2016 Dave Daniels */
-package com.davedaniels.nlp.main;
+package com.davedaniels.nlp.app;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.davedaniels.nlp.dao.SourceStringDao;
+import com.davedaniels.nlp.dao.SourceDao;
 import com.davedaniels.nlp.model.NlpData;
 import com.davedaniels.nlp.service.NlpService;
 
@@ -23,19 +23,20 @@ public class App {
    private NlpService service;
 
    @Autowired
-   private SourceStringDao dao;
+   private SourceDao dao;
 
    public void entry() throws Exception {
       List<String> strings = dao.loadSourceStrings();
       NlpData data = service.process( strings );
 
+      // This might be converted to JSON, JSP or some other view in a production environment.
       System.out.println( data.toXml() );
       for ( String noun : data.findProperNouns() ) {
          System.out.println( noun );
       }
    }
 
-   public void setDao( SourceStringDao dao ) {
+   public void setDao( SourceDao dao ) {
       this.dao = dao;
    }
 }
