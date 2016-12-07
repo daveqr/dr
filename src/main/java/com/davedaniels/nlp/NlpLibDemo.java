@@ -14,12 +14,12 @@ import com.davedaniels.nlp.dao.DbDao;
 import com.davedaniels.nlp.dao.SourceDao;
 
 /**
- * Application smoke test runner. It's only purpose it to kick off the app.
+ * Application demo runner. It's only purpose it to kick off the demo.
  * 
  * @since 1.0.0
  */
 @SpringBootApplication
-public class SmokeTest implements ApplicationRunner {
+public class NlpLibDemo implements ApplicationRunner {
 
    @Autowired
    private ApplicationContext ctx;
@@ -34,7 +34,7 @@ public class SmokeTest implements ApplicationRunner {
 
 
    public static void main( String[] args ) {
-      SpringApplication.run( SmokeTest.class, args );
+      SpringApplication.run( NlpLibDemo.class, args );
    }
 
 
