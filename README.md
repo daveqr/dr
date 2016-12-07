@@ -14,5 +14,5 @@ See README.md on master for details.
 * Spring integration
 * The DAO and Service Layers patterns
 * SOLID principles, including <i>Liskov substituion</i>, <i>Interface segregation</i> and <i>Dependency inversion</i>
-* JPA database access with Hibernate 
+* H2 in-memory database
 * XML bindings with JAXB
