@@ -1,3 +1,4 @@
+/* Copyright (c) 2016 Dave Daniels */
 package com.davedaniels.nlp.dao;
 
 
@@ -7,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-
+/**
+ * Loads source strings from an in-memory database.
+ * 
+ * @since 1.0.0
+ */
 @Repository( "dbSourceDao" )
-public class DbDaoImpl implements DbDao, SourceDao {
+public class DbSourceDao implements DbDao, SourceDao {
 
    private JdbcTemplate jdbcTemplate;
 
