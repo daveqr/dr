@@ -1,18 +1,28 @@
 # Readme
+## Overview
+This app is a demonstration of a rudimentary natural language processing library. It
 
-See README.md on master for details.
+* Parses natural lange text into sentences
+* Identifies specified keywords
+* Converts the resulting model into XML and prints the result to System.out
+
+## Requirements
 
 * Java 8
-* Maven
+* Maven 3
 
-### Techniques Demonstrated
+## Usage
+``` bash
+$  mvn spring-boot:run
+```
 
-* Natural language processing with BreakIterator
-* Processing data with Streams
+By default, the app will load it's dataset from the zip file on the classpath.
+
+## Techniques Demonstrated
+
+* Natural language processing
 * Concurrency with CompletableFutures
 * Reading and processing Zip files
 * Spring integration
-* The DAO and Service Layers patterns
-* SOLID principles, including <i>Liskov substituion</i>, <i>Interface segregation</i> and <i>Dependency inversion</i>
-* H2 in-memory database
+* In-memory database
 * XML bindings with JAXB
