@@ -6,6 +6,8 @@ import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -54,12 +56,12 @@ public class NlpData {
 
 
    public List<String> findProperNouns() {
-      List<String> foundNouns = new ArrayList<>();
+      Set<String> foundNouns = new TreeSet<>();
       for ( NlpSentence sentence : sentences ) {
          foundNouns.addAll( sentence.getProperNouns() );
       }
 
-      return Collections.unmodifiableList( foundNouns );
+      return Collections.unmodifiableList( new ArrayList<>( foundNouns ) );
    }
 
 
