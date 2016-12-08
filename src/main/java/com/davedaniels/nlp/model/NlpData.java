@@ -58,7 +58,7 @@ public class NlpData {
 
 
    public List<String> findProperNouns() {
-      return Optional.fromNullable( sentences ).or( new ArrayList<>() ).stream()
+      return Optional.of( sentences ).or( new ArrayList<>() ).stream()
             .map( NlpSentence::getProperNouns ).flatMap( Collection::stream )
             .distinct().sorted()
             .collect( Collectors.collectingAndThen( Collectors.toList(), Collections::unmodifiableList ) );
