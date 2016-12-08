@@ -4,10 +4,12 @@ package com.davedaniels.nlp.model;
 import java.io.StringWriter;
 import java.text.BreakIterator;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -56,10 +58,10 @@ public class NlpData {
 
 
    public List<String> findProperNouns() {
-      Set<String> foundNouns = new TreeSet<>();
-      for ( NlpSentence sentence : sentences ) {
-         foundNouns.addAll( sentence.getProperNouns() );
-      }
+      Set<String> foundNouns = sentences.stream()
+            .map( NlpSentence::getProperNouns )
+            .flatMap( Collection::stream )
+            .collect( Collectors.toCollection(TreeSet::new) );
 
       return Collections.unmodifiableList( new ArrayList<>( foundNouns ) );
    }
