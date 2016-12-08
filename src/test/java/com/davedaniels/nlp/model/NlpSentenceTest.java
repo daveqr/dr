@@ -14,8 +14,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.davedaniels.nlp.model.NlpSentence;
-
 @RunWith( MockitoJUnitRunner.class )
 public class NlpSentenceTest {
 

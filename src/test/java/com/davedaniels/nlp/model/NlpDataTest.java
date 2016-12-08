@@ -16,9 +16,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.diff.Diff;
 
-import com.davedaniels.nlp.model.NlpData;
-import com.davedaniels.nlp.model.NlpSentence;
-
 @RunWith( MockitoJUnitRunner.class )
 public class NlpDataTest {
 
