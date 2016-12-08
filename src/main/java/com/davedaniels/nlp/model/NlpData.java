@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
@@ -20,6 +18,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Optional;
 
 /**
  * Represents a natural language text block.
@@ -58,7 +58,7 @@ public class NlpData {
 
 
    public List<String> findProperNouns() {
-      return sentences.stream()
+      return Optional.fromNullable( sentences ).or( new ArrayList<>() ).stream()
             .map( NlpSentence::getProperNouns ).flatMap( Collection::stream )
             .distinct().sorted()
             .collect( Collectors.collectingAndThen( Collectors.toList(), Collections::unmodifiableList ) );
