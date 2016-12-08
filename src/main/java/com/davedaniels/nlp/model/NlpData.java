@@ -58,12 +58,10 @@ public class NlpData {
 
 
    public List<String> findProperNouns() {
-      Set<String> foundNouns = sentences.stream()
-            .map( NlpSentence::getProperNouns )
-            .flatMap( Collection::stream )
-            .collect( Collectors.toCollection( TreeSet::new ) );
-
-      return Collections.unmodifiableList( new ArrayList<>( foundNouns ) );
+      return sentences.stream()
+            .map( NlpSentence::getProperNouns ).flatMap( Collection::stream )
+            .distinct().sorted()
+            .collect( Collectors.collectingAndThen( Collectors.toList(), Collections::unmodifiableList ) );
    }
 
 
