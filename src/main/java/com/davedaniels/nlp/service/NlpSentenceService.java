@@ -47,7 +47,9 @@ public class NlpSentenceService implements NlpService {
       try {
          sourceStrings.stream()
                .map( text -> CompletableFuture.supplyAsync( () -> new NlpData( text, properNouns ), executorPool ) )
-               .forEach( future -> data.getSentences().addAll( future.join().getSentences() ) );
+               .map( future -> future.join() )
+               .map( NlpData::getSentences )
+               .forEach( sentences -> data.getSentences().addAll( sentences ) );
       }
       finally {
          executorPool.shutdown();

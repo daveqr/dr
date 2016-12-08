@@ -61,7 +61,7 @@ public class NlpData {
       Set<String> foundNouns = sentences.stream()
             .map( NlpSentence::getProperNouns )
             .flatMap( Collection::stream )
-            .collect( Collectors.toCollection(TreeSet::new) );
+            .collect( Collectors.toCollection( TreeSet::new ) );
 
       return Collections.unmodifiableList( new ArrayList<>( foundNouns ) );
    }
