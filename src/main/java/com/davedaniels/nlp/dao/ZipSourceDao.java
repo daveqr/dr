@@ -1,13 +1,15 @@
 /* Copyright (c) 2016 Dave Daniels */
 package com.davedaniels.nlp.dao;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -17,8 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
-
-import com.google.common.io.CharStreams;
 
 /**
  * Loads source strings from a zip file for processing.
@@ -39,23 +39,34 @@ public class ZipSourceDao implements SourceDao {
       List<String> sourceStrings = new ArrayList<>();
 
       Path path = findPath( fileName );
+      
       try (final ZipFile zipFile = new ZipFile( path.toFile() )) {
-         final Enumeration<? extends ZipEntry> entries = zipFile.entries();
-         while ( entries.hasMoreElements() ) {
-            final ZipEntry entry = entries.nextElement();
+         List<String> entries = zipFile.stream()
+               .filter( entry -> !entry.isDirectory() )
+               .filter( entry -> !entry.getName().contains( "__MACOSX" ) )
+               .filter( entry -> !entry.getName().contains( "DS_Store" ) )
+               .map( entry -> readStringEntry( zipFile, entry ) )
+               .collect( Collectors.toList() );
 
-            // Some extra Mac weirdness in the zip
-            if ( !entry.isDirectory() && !entry.getName().contains( "__MACOSX" ) && !entry.getName().contains( "DS_Store" ) ) {
-               String text = CharStreams.toString( new InputStreamReader( zipFile.getInputStream( entry ), "UTF-8" ) );
-               sourceStrings.add( text );
-            }
-         }
+         sourceStrings.addAll( entries );
       }
       catch ( ZipException e ) {
          LOG.error( "Problem unzipping.", e );
       }
 
       return sourceStrings;
+   }
+
+   
+   private String readStringEntry( ZipFile zipFile, ZipEntry entry ) {
+      try (BufferedReader buffer = new BufferedReader( new InputStreamReader( zipFile.getInputStream( entry ) ) )) {
+         return buffer.lines().collect( Collectors.joining( "\n" ) );
+      }
+      catch ( IOException e ) {
+         LOG.error( "Problem unzipping.", e );
+      }
+
+      return null;
    }
 
 
