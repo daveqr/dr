@@ -34,6 +34,7 @@ public class ZipSourceDao implements SourceDao {
    private String fileName;
 
 
+   @Override
    public List<String> loadSourceStrings() throws Exception {
       List<String> sourceStrings = new ArrayList<>();
 
@@ -42,6 +43,7 @@ public class ZipSourceDao implements SourceDao {
                .filter( entry -> !entry.isDirectory() )
                .filter( entry -> !entry.getName().contains( "__MACOSX" ) )
                .filter( entry -> !entry.getName().contains( "DS_Store" ) )
+               .filter( entry -> entry.getName().contains( ".txt" ) )
                .map( entry -> readStringEntry( zipFile, entry ) )
                .collect( Collectors.toList() );
 
