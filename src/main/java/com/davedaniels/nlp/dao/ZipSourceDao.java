@@ -38,9 +38,7 @@ public class ZipSourceDao implements SourceDao {
    public List<String> loadSourceStrings() throws Exception {
       List<String> sourceStrings = new ArrayList<>();
 
-      Path path = findPath( fileName );
-      
-      try (final ZipFile zipFile = new ZipFile( path.toFile() )) {
+      try (final ZipFile zipFile = new ZipFile( findPath( fileName ).toFile() )) {
          List<String> entries = zipFile.stream()
                .filter( entry -> !entry.isDirectory() )
                .filter( entry -> !entry.getName().contains( "__MACOSX" ) )
