@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import org.slf4j.Logger;
@@ -48,14 +47,11 @@ public class ZipSourceDao implements SourceDao {
 
          sourceStrings.addAll( entries );
       }
-      catch ( ZipException e ) {
-         LOG.error( "Problem unzipping.", e );
-      }
 
       return sourceStrings;
    }
 
-   
+
    private String readStringEntry( ZipFile zipFile, ZipEntry entry ) {
       try (BufferedReader buffer = new BufferedReader( new InputStreamReader( zipFile.getInputStream( entry ) ) )) {
          return buffer.lines().collect( Collectors.joining( "\n" ) );
