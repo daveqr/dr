@@ -22,7 +22,7 @@ import com.davedaniels.nlp.model.NlpData;
 @Service( "nlpService" )
 public class NlpSentenceService implements NlpService {
 
-   private static final Logger LOG = LoggerFactory.getLogger( NlpSentenceService.class );
+   private static final Logger log = LoggerFactory.getLogger( NlpSentenceService.class );
 
    @Autowired
    private DictionaryDao dictionaryDao;
@@ -35,7 +35,7 @@ public class NlpSentenceService implements NlpService {
 
    @Override
    public NlpData process( List<String> sourceStrings ) throws Exception {
-      LOG.debug( "Beginning String process" );
+      log.debug( "Beginning String process" );
       return aggregateData( sourceStrings, dictionaryDao.loadProperNouns() );
    }
 
