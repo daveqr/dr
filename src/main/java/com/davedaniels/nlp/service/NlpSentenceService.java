@@ -41,19 +41,13 @@ public class NlpSentenceService implements NlpService {
 
 
    protected NlpData aggregateData( final List<String> sourceStrings, final List<String> properNouns ) {
-      ExecutorService executorPool = Executors.newFixedThreadPool( 5 );
       NlpData data = new NlpData( properNouns );
 
-      try {
-         sourceStrings.stream()
-               .map( text -> CompletableFuture.supplyAsync( () -> new NlpData( text, properNouns ), executorPool ) )
-               .map( future -> future.join() )
-               .map( NlpData::getSentences )
-               .forEach( sentences -> data.getSentences().addAll( sentences ) );
-      }
-      finally {
-         executorPool.shutdown();
-      }
+      sourceStrings.stream()
+            .map( text -> CompletableFuture.supplyAsync( () -> new NlpData( text, properNouns ), executorPool ) )
+            .map( future -> future.join() )
+            .map( NlpData::getSentences )
+            .forEach( sentences -> data.getSentences().addAll( sentences ) );
 
       return data;
    }
