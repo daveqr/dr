@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 @XmlRootElement
 public class NlpData {
 
-   private static final Logger LOG = LoggerFactory.getLogger( NlpData.class );
+   private static final Logger log = LoggerFactory.getLogger( NlpData.class );
 
    private List<String> properNouns = new ArrayList<>();
 
@@ -87,7 +87,7 @@ public class NlpData {
          jaxbMarshaller.marshal( this, sw );
       }
       catch ( JAXBException e ) {
-         LOG.error( "Problem marshelling", e );
+         log.error( "Problem marshelling", e );
       }
 
       return sw.toString();
